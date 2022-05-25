@@ -51,7 +51,7 @@ async function run() {
             const query = {email};
             const result = await userCollection.updateOne(query);
             res.send(result)
-        })
+        });
 
         // POST A BOOKED TOOL
         app.put('/tools', async (req, res) => {
@@ -89,6 +89,13 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         });
+
+        // POST A REVIEW
+        app.post('/review', async(req, res) => {
+            const data = req.body;
+            const result = await reviewCollection.insertOne(data);
+            res.send(result);
+        })
 
         // GET ORDER DATA 
         app.get('/orders', async (req, res) => {
