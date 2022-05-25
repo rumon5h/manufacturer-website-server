@@ -32,9 +32,26 @@ async function run() {
                 $set: user
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
-
             res.send(result);
         });
+
+        // GET USER DATA
+        app.get('/user', async(req, res) =>{
+            const email = req.query.email;
+            const query = {email: email}
+
+            console.log(query);
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        });
+
+        // UPDATE USER API
+        app.put('/user', async(req, res) => {
+            const email = req.query.email;
+            const query = {email};
+            const result = await userCollection.updateOne(query);
+            res.send(result)
+        })
 
         // POST A BOOKED TOOL
         app.put('/tools', async (req, res) => {
