@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors());
 app.use(express.json());
@@ -15,8 +15,39 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         client.connect();
-        const toolCollection = client.db('tools').collection('tool');
-        const reviewCollection = client.db('reviews').collection('review');
+        const toolCollection = client.db('RRElectronics').collection('tools');
+        const reviewCollection = client.db('RRElectronics').collection('reviews');
+        const bookedToolCollection = client.db('RRElectronics').collection('bookedTools');
+        const userCollection = client.db('RRElectronics').collection('users');
+
+
+
+        // ADD A USER
+        app.put('/user', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user?.email };
+            console.log(user);
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+
+            res.send(result);
+        });
+
+        // POST A BOOKED TOOL
+        app.put('/tools', async (req, res) => {
+            const data = req.body;
+            const filter = { name: data?.name, email: data.email }
+            console.log(filter);
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: data
+            };
+            const result = await bookedToolCollection.updateOne(filter, updateDoc, options);
+
+        })
 
         // GET TOOLS 
         app.get('/tools', async (req, res) => {
@@ -27,7 +58,7 @@ async function run() {
         });
 
         // GET REVIEWS 
-        app.get('/reviews', async(req, res) =>{
+        app.get('/reviews', async (req, res) => {
             const query = {};
             const cursor = await reviewCollection.find(query);
             const result = await cursor.toArray();
