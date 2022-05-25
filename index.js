@@ -40,13 +40,13 @@ async function run() {
         app.put('/tools', async (req, res) => {
             const data = req.body;
             const filter = { name: data?.name, email: data.email }
-            console.log(filter);
             const options = { upsert: true };
             const updateDoc = {
                 $set: data
             };
+            
             const result = await bookedToolCollection.updateOne(filter, updateDoc, options);
-
+            res.send(result);
         })
 
         // GET TOOLS 
@@ -57,6 +57,14 @@ async function run() {
             res.send(result);
         });
 
+        // GET TOOL 
+        app.get('/tool', async (req, res) => {
+            const id = req.query.id;
+            const query = { _id: ObjectId(id) };
+            const result = await toolCollection.findOne(query);
+            res.send(result);
+        })
+
         // GET REVIEWS 
         app.get('/reviews', async (req, res) => {
             const query = {};
@@ -66,11 +74,21 @@ async function run() {
         });
 
         // GET ORDER DATA 
-        app.get('/orders', async(req, res) => {
-            const email = {email: req?.query?.email};
-            const cursor = await bookedToolCollection.find(email);
+        app.get('/orders', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = await bookedToolCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
+        });
+
+
+        // DELETE SINGLE ORDER
+        app.delete('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookedToolCollection.deleteOne(query);
+            res.send(result)
         })
     }
     finally {
