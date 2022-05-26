@@ -26,7 +26,6 @@ async function run() {
         app.put('/user', async (req, res) => {
             const user = req.body;
             const filter = { email: user?.email };
-            console.log(user);
             const options = { upsert: true };
             const updateDoc = {
                 $set: user
@@ -39,8 +38,6 @@ async function run() {
         app.get('/user', async(req, res) =>{
             const email = req.query.email;
             const query = {email: email}
-
-            console.log(query);
             const result = await userCollection.findOne(query);
             res.send(result);
         });
@@ -48,9 +45,15 @@ async function run() {
         // UPDATE USER API
         app.put('/user', async(req, res) => {
             const email = req.query.email;
-            const query = {email};
-            const result = await userCollection.updateOne(query);
-            res.send(result)
+            const filter = {email: email};
+            const data = req.body;
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: data
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+            
         });
 
         // POST A BOOKED TOOL
