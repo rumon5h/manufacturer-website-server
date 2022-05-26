@@ -10,7 +10,6 @@ app.use(express.json());
 
 // https://calm-castle-51840.herokuapp.com
 
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ck7ho.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -21,6 +20,13 @@ async function run() {
         const reviewCollection = client.db('RRElectronics').collection('reviews');
         const bookedToolCollection = client.db('RRElectronics').collection('bookedTools');
         const userCollection = client.db('RRElectronics').collection('users');
+        const usersAuthCollection = client.db('RRElectronics').collection('usersAuth');
+
+        // PUT AUTH USER 
+        app.put('/authUser/:email', async(req, res) =>{
+            const email = req.params.email;
+
+        })
 
         // GET ALL USER
         app.get('/users', async(req, res) =>{
@@ -29,7 +35,8 @@ async function run() {
             console.log(cursor);
             const result = await cursor.toArray();
             res.send(result);
-        })
+        });
+
         // ADD A USER
         app.put('/user', async (req, res) => {
             const user = req.body;
@@ -90,6 +97,13 @@ async function run() {
             const id = req.query.id;
             const query = { _id: ObjectId(id) };
             const result = await toolCollection.findOne(query);
+            res.send(result);
+        });
+
+        // POST NEW TOOL 
+        app.post('/tool', async(req, res) =>{
+            const data =  req.body;
+            const result = await toolCollection.insertOne(data);
             res.send(result);
         })
 
