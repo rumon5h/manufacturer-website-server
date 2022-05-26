@@ -22,6 +22,14 @@ async function run() {
         const bookedToolCollection = client.db('RRElectronics').collection('bookedTools');
         const userCollection = client.db('RRElectronics').collection('users');
 
+        // GET ALL USER
+        app.get('/users', async(req, res) =>{
+            const query = {};
+            const cursor = await userCollection.find(query);
+            console.log(cursor);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         // ADD A USER
         app.put('/user', async (req, res) => {
             const user = req.body;
