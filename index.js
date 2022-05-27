@@ -34,8 +34,6 @@ async function run() {
               };
           const result = await usersAuthCollection.updateOne(filter, updateDoc, options);
           const token = jwt.sign({email: email}, process.env.ACCESS_TOKEN, {expiresIn: '2h'})
-          console.log(token);
-          console.log(process.env.ACCESS_TOKEN);
           res.send({result, token});
         });
 
@@ -44,7 +42,6 @@ async function run() {
             const email = req.query.email;
             const query = {email};
             const cursor = await usersAuthCollection.find(query);
-            console.log(cursor);
             const result = await cursor.toArray();
             res.send(result);
         });
@@ -53,7 +50,6 @@ async function run() {
         app.get('/users', async(req, res) =>{
             const query = {};
             const cursor = await userCollection.find(query);
-            console.log(cursor);
             const result = await cursor.toArray();
             res.send(result);
         });
