@@ -122,7 +122,15 @@ async function run() {
             const data =  req.body;
             const result = await toolCollection.insertOne(data);
             res.send(result);
-        })
+        });
+
+        // DELETE A PRODUCT
+        app.delete('/tool', async(req, res) =>{
+            const id = req.query.id;
+            const query = {_id: ObjectId(id)};
+            const result = await toolCollection.deleteOne(query);
+            res.send(result)
+        });
 
         // GET REVIEWS 
         app.get('/reviews', async (req, res) => {
