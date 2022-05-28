@@ -1,6 +1,6 @@
 # RRElectronics
 
-Live Site [Create React App](https://github.com/facebook/create-react-app).
+Live Site [Live site](https://assignment-12-d283f.web.app/).
 
 ## Features
 * First of all, you can see a responsive navbar
@@ -26,3 +26,4 @@ Live Site [Create React App](https://github.com/facebook/create-react-app).
 * React query
 * MongoDb
 * Express
+
