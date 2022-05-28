@@ -147,11 +147,18 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         });
+        // GET ORDER DATA 
+        app.get('/allOrder', async (req, res) => {
+            const query = {};
+            const cursor = await bookedToolCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
 
 
         // DELETE SINGLE ORDER
-        app.delete('/order/:id', async (req, res) => {
-            const id = req.params.id;
+        app.delete('/order', async (req, res) => {
+            const id = req.query.id;
             const query = { _id: ObjectId(id) };
             const result = await bookedToolCollection.deleteOne(query);
             res.send(result)
