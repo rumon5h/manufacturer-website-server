@@ -22,8 +22,8 @@ async function run() {
         const userCollection = client.db('RRElectronics').collection('users');
         const usersAuthCollection = client.db('RRElectronics').collection('usersAuth');
 
-        // PUT AUTH USER 
-        app.put('/authUser/:email', async(req, res) =>{
+        // PATCH AUTH USER 
+        app.patch('/authUser/:email', async(req, res) =>{
             const email = req.params.email;
             const filter = {email: email};
             const options = { upsert: true };
@@ -54,7 +54,7 @@ async function run() {
         });
 
         // ADD A USER
-        app.put('/user', async (req, res) => {
+        app.patch('/user', async (req, res) => {
             const user = req.body;
             const filter = { email: user?.email };
             const options = { upsert: true };
@@ -74,7 +74,7 @@ async function run() {
         });
 
         // UPDATE USER API
-        app.put('/user', async(req, res) => {
+        app.patch('/user', async(req, res) => {
             const email = req.query.email;
             const filter = {email: email};
             const data = req.body;
@@ -88,7 +88,7 @@ async function run() {
         });
 
         // POST A BOOKED TOOL
-        app.put('/tools', async (req, res) => {
+        app.patch('/tools', async (req, res) => {
             const data = req.body;
             const filter = { name: data?.name, email: data.email }
             const options = { upsert: true };
